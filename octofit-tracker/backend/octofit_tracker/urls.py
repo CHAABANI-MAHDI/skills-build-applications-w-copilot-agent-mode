@@ -14,11 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+import os
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.http import JsonResponse
 
 # Dummy viewsets for demonstration (replace with real ones as needed)
 from rest_framework import viewsets
@@ -54,4 +56,7 @@ router.register(r'leaderboard', LeaderboardViewSet, basename='leaderboard')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/codespace-url/', lambda request: JsonResponse({
+        'codespace_url': f"https://{os.environ.get('CODESPACE_NAME', 'localhost')}-8000.app.github.dev"
+    })),
 ]
